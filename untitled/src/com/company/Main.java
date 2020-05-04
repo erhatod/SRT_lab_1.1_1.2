@@ -13,6 +13,7 @@ public class Main {
     static final Random random = new Random();
 
     static long startTime;
+    static long addTime;
 
     static double[][] matrixOfSinusoid = new double[n][N];
 
@@ -42,16 +43,36 @@ public class Main {
         XYChart chart = QuickChart.getChart("Lab1.1", "N", "x", "x(t)", arrayN, signal_x);
         new SwingWrapper(chart).displayChart();
 
+        //АвтоКореляція лічильник
         startTime = System.nanoTime();
         double[] resultAutoCorrelation = getR(signal_x, Mx);
-        System.out.println("Tr = " + (System.nanoTime() - startTime));
+        long time1 = (System.nanoTime() - startTime);
+        System.out.println("Tr = " + time1);
 
         XYChart chart1 = QuickChart.getChart("Lab1.2", "t", "Rxx", "Rxx(t)", arrayHalfN, resultAutoCorrelation);
         new SwingWrapper(chart1).displayChart();
 
         double[] signal_x2 = genRandomSignal();
         double Mx2 = getMx(signal_x2);
+
+        //Взаємокореляція лічильник
+        startTime = System.nanoTime();
         double[] resultCorrelation = getR(signal_x, Mx, signal_x2, Mx2);
+        long time2 = (System.nanoTime() - startTime);
+
+        //Add task out start
+        System.out.println("Час автокореляції = " + time1);
+        System.out.println("Час взаємокореляції = " + time2);
+
+        if (time1 > time2){
+            System.out.println("time1 > time2");
+        }else if (time1 == time2) {
+            System.out.println("time1 == time2");
+        }else {
+            System.out.println("time1 < time2");
+        //Add task out end
+        }
+
 
         XYChart chart3 = QuickChart.getChart("Lab1.2", "t", "Rxy", "Rxy(t)", arrayHalfN, resultCorrelation);
         new SwingWrapper(chart3).displayChart();
